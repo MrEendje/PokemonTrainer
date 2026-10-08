@@ -1,11 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 function Nav() {
   return (
-    <nav>
-      <Link to="/">Home</Link> |{" "}
-      <Link to="/list">List</Link> |{" "}
-    </nav>
+    <header className="header">
+      <Link to="/" className="logo">Pokémon Team Manager</Link>
+
+      <nav className="nav-links">
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/list">Pokémon Lijst</NavLink>
+        <NavLink to="/teams">Teams & Favorieten</NavLink>
+      </nav>
+    </header>
   );
 }
 

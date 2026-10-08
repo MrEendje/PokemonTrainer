@@ -1,0 +1,139 @@
+body {
+  font-family: sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+}
+
+.pokemon-card {
+  background: #e8e8e8;
+  padding: 12px;
+  text-align: left;
+  border-radius: 10px;
+  border:0;
+  margin: 0;
+}
+
+.pokemon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 0;
+}
+ul {
+  list-style-type: none;
+}
+
+
+/* NAV */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 48px;
+  border-bottom: 2px solid #ccc;
+  position: sticky;
+  top: 0;
+  background: #f2f2f2;
+  z-index: 10;
+}
+
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: black;
+  text-decoration: none;
+}
+
+.nav-links a.active {
+  color: #e3350d;
+}
+
+/* LIST */
+
+.list-page {
+  display: flex;
+  gap: 40px;
+  padding: 40px 48px;
+}
+
+.filters {
+  width: 260px;
+  flex-shrink: 0;
+  padding-right: 40px;
+  border-right: 2px solid #ccc;
+}
+
+.list-content {
+  flex: 1;
+}
+
+.list-title {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.list-title h1 {
+  font-size: 40px;
+  margin: 0;
+}
+
+.list-title p {
+  color: #777;
+  margin: 0;
+}
+
+.search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  margin: 24px 0;
+  font-size: 16px;
+  background-color: #e8e8e8;
+  border: 1px solid #999c;
+}
+
+/* KAART */
+.card-link {
+  display: block;
+  color: black;
+  text-decoration: none;
+}
+
+.card-image {
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #d6d3d1;
+  border: 1px solid #999;
+}
+
+.card-image img {
+  width: 120px;
+}
+
+.card-name {
+  margin: 12px 0 8px;
+  font-size: 18px;
+  text-transform: capitalize;
+}
+
+.card-type {
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 14px;
+  background: #f7f4f3;
+  text-transform: capitalize;
+}

@@ -1,66 +1,102 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+const types = ["grass", "fire", "water", "electric", "poison", "flying", "normal", "fighting", "psychic", "rock"];
+
 function List() {
-  // Alle Pokémon met hun details (komt uit de API)
+  // State
   const [pokemons, setPokemons] = useState([]);
-  // Wat de gebruiker in de zoekbalk typt
   const [search, setSearch] = useState("");
+  const [selectedType, setSelectedType] = useState("");
 
-  // Alleen de Pokémon die passen bij de zoektekst (op naam of nummer)
-  const filtered = pokemons.filter((pokemon) =>
-    pokemon.name.includes(search.toLowerCase()) ||
-    String(pokemon.id) === search
-  );
 
-  // Draait één keer als de pagina laadt ([] = geen dependencies)
+  // Zoekfilter
+  const filtered = pokemons.filter((pokemon) => {
+    const matchSearch =
+      pokemon.name.includes(search.toLowerCase()) ||
+      String(pokemon.id) === search;
+
+    const matchType =
+      selectedType === "" ||
+      pokemon.types.some((t) => t.type.name === selectedType);
+
+    return matchSearch && matchType;
+  });
+
+
+  // Data ophalen
   useEffect(() => {
-    // 1. Haal de lijst op (geeft per Pokémon alleen name + url)
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=1500")
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=50")
       .then((res) => res.json())
       .then((data) => {
-        // 2. Haal voor elke Pokémon de details op via zijn eigen url
         const request = data.results.map((pokemon) =>
           fetch(pokemon.url).then((res) => res.json())
         );
-        // 3. Wacht tot alle requests klaar zijn
         return Promise.all(request);
       })
-      // 4. Sla alle details op in state
       .then((details) => setPokemons(details));
   }, []);
 
   return (
-    <div>
-      <h1>Pokémon Lijst</h1>
-      <p>{filtered.length} resultaten</p>
+    <div className="list-page">
+      {/* Filter */}
+      <aside className="filters">
+        <h2>Filters</h2>
+        <p className="filter-label">Type</p>
+        <div className="type-buttons">
+          {types.map((type) => (
+            <button
+              key={type}
+              className={selectedType === type ? "type-button active" : "type-button"}
+              onClick={() => setSelectedType(selectedType === type ? "" : type)}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
 
-      {/* Zoekbalk: elke letter die je typt komt in "search" */}
-      <input
-        type="text"
-        placeholder="Zoek op naam of nummer..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      </aside>
+      {/* Inhoud */}
+      <main className="list-content">
+        {/* Titel */}
+        <div className="list-title">
+          <h1>Pokemon Lijst</h1>
+          <p>{filtered.length} resultaten</p>
+        </div>
 
-      <ul>
-        {/* Maak van elke gefilterde Pokémon een <li> */}
-        {filtered.map((pokemon) => (
-          <li key={pokemon.name}>
-            {/* Klik = naar de detailpagina met het id in de url */}
-            <Link to={`/detail/${pokemon.id}`}>
-              <img
-                src={pokemon.sprites.front_default}
-                alt={pokemon.name} />
-              {pokemon.name}
-              {/* Types als tekst, bijv. "grass, poison" */}
-              <p>
-                {pokemon.types.map((t) => t.type.name).join(", ")}
-              </p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+        {/* Zoekbalk */}
+        <input
+          className="search"
+          type="text"
+          placeholder="Zoek op naam of nummer..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        {/* Lijst */}
+        <ul className="pokemon-grid">
+          {filtered.map((pokemon) => (
+            // Card
+            <li key={pokemon.name} className={`pokemon-card ${pokemon.types[0].type.name}`}>
+              <Link to={`/detail/${pokemon.id}`} className="card-link">
+                {/* Image */}
+                <div className="card-image">
+                  <img
+                    src={pokemon.sprites.front_default}
+                    alt={pokemon.name} />
+                </div>
+                {/* Naam */}
+                <h3 className="card-name">{pokemon.name}</h3>
+                {/* Type */}
+                <p className="card-type">
+                  {pokemon.types.map((t) => t.type.name).join(", ")}
+                </p>
+              </Link>
+
+            </li>
+          ))}
+        </ul>
+      </main>
     </div>
   );
 }
