@@ -17,6 +17,7 @@ function Detail() {
     <div>
       <h1>{pokemon.name}</h1>
       <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+      <p>Type: {pokemon.types.map((t) => t.type.name).join(", ")}</p>
       <p>Hoogte: {pokemon.height}</p>
       <p>Gewicht: {pokemon.weight}</p>
     </div>

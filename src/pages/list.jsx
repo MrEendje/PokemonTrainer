@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Filters from "../components/Filters";
+import SearchBar from "../components/SearchBar";
+import PokemonGrid from "../components/PokemonGrid";
+import { generations } from "../data/filters";
 
-const types = ["grass", "fire", "water", "electric", "poison", "flying", "normal", "fighting", "psychic", "rock"];
 
 function List() {
   // State
   const [pokemons, setPokemons] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const [selectedGen, setSelectedGen] = useState("");
+  const [favorites, setFavorites] = useState(
+    () => JSON.parse(localStorage.getItem("favorites")) || []
+  );
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
 
 
   // Zoekfilter
@@ -19,14 +26,20 @@ function List() {
     const matchType =
       selectedType === "" ||
       pokemon.types.some((t) => t.type.name === selectedType);
-
-    return matchSearch && matchType;
+    const gen = generations[selectedGen];
+    const matchGen =
+      selectedGen === "" ||
+      (pokemon.id >= gen.min && pokemon.id <= gen.max);
+    const matchFavorite =
+      !onlyFavorites ||
+      favorites.includes(pokemon.id);
+    return matchSearch && matchType && matchGen && matchFavorite;
   });
 
 
   // Data ophalen
   useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=50")
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=1050")
       .then((res) => res.json())
       .then((data) => {
         const request = data.results.map((pokemon) =>
@@ -37,25 +50,31 @@ function List() {
       .then((details) => setPokemons(details));
   }, []);
 
+  // Favorieten opslaan
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
+
+  // Favoriet aan/uit
+  function toggleFavorite(id) {
+    if (favorites.includes(id)) {
+      setFavorites(favorites.filter((f) => f !== id));
+    } else {
+      setFavorites([...favorites, id]);
+    }
+  }
+
   return (
     <div className="list-page">
       {/* Filter */}
-      <aside className="filters">
-        <h2>Filters</h2>
-        <p className="filter-label">Type</p>
-        <div className="type-buttons">
-          {types.map((type) => (
-            <button
-              key={type}
-              className={selectedType === type ? "type-button active" : "type-button"}
-              onClick={() => setSelectedType(selectedType === type ? "" : type)}
-            >
-              {type}
-            </button>
-          ))}
-        </div>
-
-      </aside>
+      <Filters
+        selectedType={selectedType}
+        onTypeChange={setSelectedType}
+        selectedGen={selectedGen}
+        onGenChange={setSelectedGen}
+        onlyFavorites={onlyFavorites}
+        onOnlyFavoritesChange={setOnlyFavorites}
+      />
       {/* Inhoud */}
       <main className="list-content">
         {/* Titel */}
@@ -65,37 +84,18 @@ function List() {
         </div>
 
         {/* Zoekbalk */}
-        <input
-          className="search"
-          type="text"
-          placeholder="Zoek op naam of nummer..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <SearchBar value={search} onChange={setSearch} />
 
         {/* Lijst */}
-        <ul className="pokemon-grid">
-          {filtered.map((pokemon) => (
-            // Card
-            <li key={pokemon.name} className={`pokemon-card ${pokemon.types[0].type.name}`}>
-              <Link to={`/detail/${pokemon.id}`} className="card-link">
-                {/* Image */}
-                <div className="card-image">
-                  <img
-                    src={pokemon.sprites.front_default}
-                    alt={pokemon.name} />
-                </div>
-                {/* Naam */}
-                <h3 className="card-name">{pokemon.name}</h3>
-                {/* Type */}
-                <p className="card-type">
-                  {pokemon.types.map((t) => t.type.name).join(", ")}
-                </p>
-              </Link>
-
-            </li>
-          ))}
-        </ul>
+        {pokemons.length === 0 ? (
+          <p>Laden...</p>
+        ) : (
+          <PokemonGrid
+            pokemons={filtered}
+            favorites={favorites}
+            onToggleFavorite={toggleFavorite}
+          />
+        )}
       </main>
     </div>
   );
