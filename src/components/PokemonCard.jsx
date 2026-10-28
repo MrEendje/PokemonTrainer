@@ -10,13 +10,10 @@ function PokemonCard({ id, name, image, types, isFavorite, onToggleFavorite }) {
         {isFavorite ? "★" : "☆"}
       </button>
       <Link to={`/detail/${id}`} className="card-link">
-        {/* Image */}
         <div className="card-image">
           <img src={image} alt={name} />
         </div>
-        {/* Naam */}
         <h3 className="card-name">{name}</h3>
-        {/* Type */}
         <p className="card-type">{types.join(", ")}</p>
       </Link>
     </li>

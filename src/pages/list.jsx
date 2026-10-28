@@ -6,7 +6,6 @@ import { generations } from "../data/filters";
 
 
 function List() {
-  // State
   const [pokemons, setPokemons] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState("");
@@ -17,7 +16,6 @@ function List() {
   const [onlyFavorites, setOnlyFavorites] = useState(false);
 
 
-  // Zoekfilter
   const filtered = pokemons.filter((pokemon) => {
     const matchSearch =
       pokemon.name.includes(search.toLowerCase()) ||
@@ -37,7 +35,6 @@ function List() {
   });
 
 
-  // Data ophalen
   useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon?limit=1050")
       .then((res) => res.json())
@@ -50,12 +47,10 @@ function List() {
       .then((details) => setPokemons(details));
   }, []);
 
-  // Favorieten opslaan
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
-  // Favoriet aan/uit
   function toggleFavorite(id) {
     if (favorites.includes(id)) {
       setFavorites(favorites.filter((f) => f !== id));
@@ -66,7 +61,6 @@ function List() {
 
   return (
     <div className="list-page">
-      {/* Filter */}
       <Filters
         selectedType={selectedType}
         onTypeChange={setSelectedType}
@@ -75,18 +69,14 @@ function List() {
         onlyFavorites={onlyFavorites}
         onOnlyFavoritesChange={setOnlyFavorites}
       />
-      {/* Inhoud */}
       <main className="list-content">
-        {/* Titel */}
         <div className="list-title">
           <h1>Pokemon Lijst</h1>
           <p>{filtered.length} resultaten</p>
         </div>
 
-        {/* Zoekbalk */}
         <SearchBar value={search} onChange={setSearch} />
 
-        {/* Lijst */}
         {pokemons.length === 0 ? (
           <p>Laden...</p>
         ) : (

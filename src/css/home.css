@@ -1,0 +1,157 @@
+.home {
+  padding: 56px 48px;
+}
+
+.home-title {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin: 0 0 12px;
+}
+
+.home-subtitle {
+  color: #777;
+  font-size: 18px;
+  margin: 0;
+}
+
+.stats,
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+}
+
+.stats {
+  margin: 48px 0 56px;
+}
+
+.stat-card,
+.team-card {
+  background: #e8e8e8;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+  color: #e3350d;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.stat-value {
+  font-size: 48px;
+  font-weight: 800;
+  margin: 8px 0;
+}
+
+.stat-text {
+  color: #777;
+  font-size: 15px;
+  margin: 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.section-header h2 {
+  font-size: 44px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.new-team-button {
+  background: #e3350d;
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.new-team-button:hover {
+  background: #c22c0a;
+}
+
+.team-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.team-card h3 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.delete-button {
+  background: none;
+  border: 1px solid #999;
+  color: #777;
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  border-color: #e3350d;
+  color: #e3350d;
+}
+
+.team-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.team-slot {
+  width: 50px;
+  height: 50px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #d6d3d1;
+  border: 1px solid #999;
+}
+
+.team-slot img {
+  width: 48px;
+}
+
+.team-slot.empty {
+  background: transparent;
+  border-style: dashed;
+  color: #777;
+  font-size: 22px;
+}
+
+.team-count {
+  color: #777;
+  margin: 16px 0 0;
+}
+
+@media (max-width: 700px) {
+  .home {
+    padding: 32px 16px;
+  }
+
+  .home-title {
+    font-size: 36px;
+  }
+
+  .section-header h2 {
+    font-size: 30px;
+  }
+}
